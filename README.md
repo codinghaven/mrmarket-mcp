@@ -162,6 +162,29 @@ mrmarket.ai is a research and analysis layer, not a brokerage and not a real-tim
 
 ---
 
+## Troubleshooting
+
+Every `query_data` response carries a stable `error_code`, plus `warnings` and `assumptions` arrays that explain how the question was interpreted. Read those first; they usually point at the cause.
+
+| Symptom | What it means | What to do |
+|---------|---------------|------------|
+| `QUERY_NOT_UNDERSTOOD` | The question was ambiguous or referenced an unsupported metric. | Rephrase with specifics (period type, time range, ranking criterion). Use `describe_data` to confirm a field exists. |
+| `RATE_LIMITED` | You hit your tier's per-minute or per-day cap. | Wait briefly, or check `get_account_status` for your exact limits. |
+| `INSUFFICIENT_CREDITS` | Your credit balance is exhausted. | Top up or upgrade at [mrmarket.ai](https://mrmarket.ai). Not a fault, no retry needed. |
+| `SCHEMA_DRIFT` | A data field is temporarily unavailable (mid-update). | Rephrase without the affected scope and try again. |
+| `BILLING_UNAVAILABLE` / `SERVICE_ERROR` | A transient server-side issue. | Retry once; the `retryable` flag will be set. |
+| Empty result on a screen | Filters were too tight. | Loosen one threshold (e.g. ROIC > 15% instead of 25%) or widen the time range. |
+| A result looks wrong | An assumption or default may not match your intent. | Read the `assumptions` array. If it still looks wrong, file it with `report_issue` (include the `query_id`). |
+
+For a guided tour of capabilities, limits, and worked examples at any time, call the free `getting_started` tool.
+
+## Support
+
+* Report a wrong result, bug, or feature request with the `report_issue` tool. Pass the `query_id` from the response so the exact run can be investigated. This is the fastest path because it links directly to the query trace.
+* Email: [support@mrmarket.ai](mailto:support@mrmarket.ai)
+
+---
+
 ## Links
 
 * Product and sign-up: [mrmarket.ai](https://mrmarket.ai)
